@@ -4,7 +4,7 @@ using Users.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// Default Connection Builder
 builder.Services.AddDbContext<UserDBContext>(
     opt =>
     {
