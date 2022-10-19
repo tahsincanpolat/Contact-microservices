@@ -8,5 +8,12 @@ namespace Reports.DataAccess
         {
 
         }
+
+        public ReportsDBContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
+        public DbSet<Reports> Reports { get; set; }
     }
 }

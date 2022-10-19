@@ -1,7 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using Users.DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddDbContext<UserDBContext>(
+    opt =>
+    {
+        opt.EnableSensitiveDataLogging();
+        opt.EnableDetailedErrors();
+        opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    }, ServiceLifetime.Transient
+);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
