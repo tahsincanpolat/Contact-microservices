@@ -4,8 +4,6 @@ using Users.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddDbContext<UserDBContext>(
     opt =>
@@ -30,7 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+// Get All Users
 app.MapGet("/users", async ( UserDBContext db) =>
 {
     if (db.Users.ToList() != null)
@@ -43,13 +41,14 @@ app.MapGet("/users", async ( UserDBContext db) =>
         return Results.BadRequest("Error! Users not found.");
     }
 
-});
+}).WithName("getUsers");
 
+// Get User By Id
 app.MapGet("/userById/{id}", async (Guid? id, UserDBContext db) =>
 {
     if (id.HasValue)
     {
-        var user = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
         return Results.Ok(user);
     }
     else
@@ -57,11 +56,42 @@ app.MapGet("/userById/{id}", async (Guid? id, UserDBContext db) =>
         return Results.BadRequest("Error! Please enter a valid id.");
     }
 
-});
+}).WithName("getUser");
+
+
+// Get User Details
+
+app.MapGet("/userDetails", async (UserDBContext db) =>
+{
+    var usersDetail = await db.Users.Include(ud => ud.ContactInfos).ToListAsync();
+
+    return Results.Ok(usersDetail);
+
+}).WithName("usersDetail");
+
+// Get User Detail
+
+app.MapGet("/userDetailById/{id}", async (Guid? id, UserDBContext db) =>
+{
+    if (id.HasValue)
+    {
+        var userDetail = await db.Users.Include(ud => ud.ContactInfos).FirstOrDefaultAsync(ud => ud.Id == id);
+
+        return Results.Ok(userDetail);
+    }
+    else
+    {
+        return Results.BadRequest("Error! Please enter a valid id.");
+    }
+
+}).WithName("userDetail");
+
+// Add User
 
 app.MapPost("/userAdd", async (User user,UserDBContext db) =>
 {
     await db.Users.AddAsync(user);
+
     if (db.SaveChanges()>0)
     {
         return Results.Ok(user);
@@ -71,49 +101,65 @@ app.MapPost("/userAdd", async (User user,UserDBContext db) =>
         return Results.BadRequest("Error! Could not add user.");
     }
 
+}).WithName("addUser");
+
+// Add User Detail
+app.MapPost("/userDetailAdd/{id}", async (Guid id, ContactInfo info, UserDBContext db) =>
+{
+    var user = await db.Users.FindAsync(id);
+
+    if (user == null)
+    {
+        return Results.BadRequest("Error! User not found.");
+    }
+
+    info.UId = id;
+    await db.AddAsync(info);
+    if (await db.SaveChangesAsync() > 0)
+    {
+        return Results.Ok(info);
+    }
+    return Results.BadRequest("User contact information could not be added.");
 });
+
+
+// Delete User
 
 app.MapDelete("/userDelete/{id}", async (Guid? id, UserDBContext db) =>
 {
-    User? getUser = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
-    if (getUser == null)
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    if (user == null)
     {
         return Results.BadRequest("Error! User not found.");
     }
     else
     {
-        db.Users.Remove(getUser);
+        db.Users.Remove(user);
         db.SaveChanges();
         return Results.Ok("User Deleted.");
     }
 
+}).WithName("deleteUser");
+
+// Delete User Detail
+app.MapDelete("/userDetailDelete/{id}", async (Guid id, UserDBContext db) =>
+{
+    var userInfo = await db.ContactInfos.FindAsync(id);
+    if (userInfo == null)
+    {
+        return Results.BadRequest("Contact Information not found");
+    }
+    else
+    {
+        db.ContactInfos.Remove(userInfo);
+        await db.SaveChangesAsync();
+        return Results.Ok("User information was deleted");
+    }
+
+    
 });
 
+app.Run();
 
 
 
-//var summaries = new[]
-//{
-//    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-//};
-
-//app.MapGet("/weatherforecast", () =>
-//{
-//    var forecast = Enumerable.Range(1, 5).Select(index =>
-//       new WeatherForecast
-//       (
-//           DateTime.Now.AddDays(index),
-//           Random.Shared.Next(-20, 55),
-//           summaries[Random.Shared.Next(summaries.Length)]
-//       ))
-//        .ToArray();
-//    return forecast;
-//})
-//.WithName("GetWeatherForecast");
-
-//app.Run();
-
-//internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-//{
-//    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-//}
