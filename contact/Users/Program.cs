@@ -67,7 +67,7 @@ app.MapGet("/userDetails", async (UserDBContext db) =>
 
     return Results.Ok(usersDetail);
 
-}).WithName("usersDetail");
+}).WithName("usersDetails");
 
 // Get User Detail
 
@@ -120,7 +120,7 @@ app.MapPost("/userDetailAdd/{id}", async (Guid id, ContactInfo info, UserDBConte
         return Results.Ok(info);
     }
     return Results.BadRequest("User contact information could not be added.");
-});
+}).WithName("addUserDetail");
 
 
 // Delete User
@@ -157,7 +157,7 @@ app.MapDelete("/userDetailDelete/{id}", async (Guid id, UserDBContext db) =>
     }
 
     
-});
+}).WithName("deleteUserDetail");
 
 app.Run();
 
