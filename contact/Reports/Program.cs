@@ -49,6 +49,15 @@ app.MapGet("/getReports", async (ReportsDBContext db) =>
 app.MapPost("/createReport", async (ReportsDBContext db, ISendEndpointProvider sendEndpointProivder) =>
 {
     AllReports report = new AllReports();
+    report.Id = new Guid();
+    report.Status = "Getting Ready";
+    report.CreateDate = DateTime.Now;
+
+    await db.AllReports.AddAsync(report);
+    await db.SaveChangesAsync();
+
+    // Add Queue ? 
+
 });
 
 app.Run();
