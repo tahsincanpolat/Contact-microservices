@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Reports.Consumers;
 using Reports.DataAccess;
 using Reports.Model;
 
@@ -17,7 +18,25 @@ builder.Services.AddDbContext<ReportsDBContext>(
 // MassTransit Configure
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+
+            h.ConfigureBatchPublish(x =>
+            {
+                x.Enabled = true;
+                x.Timeout = TimeSpan.FromMilliseconds(500);
+            });
+        });
+
+        cfg.ReceiveEndpoint("create-report", endpoint =>
+        {
+            endpoint.ConfigureConsumer<ReportConsumer>(context);
+        });
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();

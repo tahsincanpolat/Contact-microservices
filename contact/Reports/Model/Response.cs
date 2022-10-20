@@ -12,5 +12,11 @@
             this.ResponseCode = responseCode;   
             this.ResponseMessage = responseMessage; 
         }
+
+        public Response(int responseCode, string responseMessage)
+        {
+            this.ResponseCode = responseCode;
+            this.ResponseMessage = responseMessage;
+        }
     }
 }
