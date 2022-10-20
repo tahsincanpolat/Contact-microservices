@@ -11,7 +11,8 @@ namespace Reports.DataAccess
 
         public ReportsDBContext(DbContextOptions options) : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
 
         public DbSet<AllReports> AllReports { get; set; }

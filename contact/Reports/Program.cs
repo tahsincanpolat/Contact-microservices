@@ -13,6 +13,13 @@ builder.Services.AddDbContext<ReportsDBContext>(
         opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     }, ServiceLifetime.Transient
 );
+
+// MassTransit Configure
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -56,7 +63,10 @@ app.MapPost("/createReport", async (ReportsDBContext db, ISendEndpointProvider s
     await db.AllReports.AddAsync(report);
     await db.SaveChangesAsync();
 
-    // Add Queue ? 
+    var endPoint = await sendEndpointProivder.GetSendEndpoint(new Uri("queue:create-report"));
+    await endPoint.Send<AllReports>(report);
+
+    return Results.Ok(report);
 
 });
 
