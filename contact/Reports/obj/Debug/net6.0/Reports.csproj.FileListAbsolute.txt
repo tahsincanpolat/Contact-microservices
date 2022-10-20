@@ -34,3 +34,10 @@ C:\Users\thsn_\Desktop\rise-contact\contact\Reports\obj\Debug\net6.0\refint\Repo
 C:\Users\thsn_\Desktop\rise-contact\contact\Reports\obj\Debug\net6.0\Reports.pdb
 C:\Users\thsn_\Desktop\rise-contact\contact\Reports\obj\Debug\net6.0\Reports.genruntimeconfig.cache
 C:\Users\thsn_\Desktop\rise-contact\contact\Reports\obj\Debug\net6.0\ref\Reports.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\MassTransit.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\MassTransit.Abstractions.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\MassTransit.AspNetCoreIntegration.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\MassTransit.ExtensionsDependencyInjectionIntegration.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\MassTransit.RabbitMqTransport.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\thsn_\Desktop\rise-contact\contact\Reports\bin\Debug\net6.0\System.Text.Json.dll
