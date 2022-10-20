@@ -1,6 +1,6 @@
 ﻿namespace Reports.DataAccess
 {
-    public class Reports
+    public class AllReports
     {
         public Guid Id { get; set; }    
         public DateTime CreateDate { get; set; }

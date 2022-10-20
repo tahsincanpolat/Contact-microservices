@@ -1,5 +1,7 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Reports.DataAccess;
+using Reports.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +32,7 @@ app.UseHttpsRedirection();
 
 app.MapGet("/getReports", async (ReportsDBContext db) =>
 {
-    var reports  = await db.Reports.ToListAsync();
+    var reports  = await db.AllReports.ToListAsync();
     if(reports == null)
     {
         return Results.BadRequest("Report not found");
@@ -41,4 +43,12 @@ app.MapGet("/getReports", async (ReportsDBContext db) =>
     }
 
 });
+
+// Create Report
+
+app.MapPost("/createReport", async (ReportsDBContext db, ISendEndpointProvider sendEndpointProivder) =>
+{
+    AllReports report = new AllReports();
+});
+
 app.Run();

@@ -12,7 +12,7 @@ using Reports.DataAccess;
 namespace Reports.Migrations
 {
     [DbContext(typeof(ReportsDBContext))]
-    [Migration("20221019161022_a")]
+    [Migration("20221020132711_a")]
     partial class a
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Reports.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Reports.DataAccess.Reports", b =>
+            modelBuilder.Entity("Reports.DataAccess.AllReports", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace Reports.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reports");
+                    b.ToTable("AllReports");
                 });
 #pragma warning restore 612, 618
         }

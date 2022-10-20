@@ -22,7 +22,7 @@ namespace Reports.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Reports.DataAccess.Reports", b =>
+            modelBuilder.Entity("Reports.DataAccess.AllReports", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace Reports.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reports");
+                    b.ToTable("AllReports");
                 });
 #pragma warning restore 612, 618
         }

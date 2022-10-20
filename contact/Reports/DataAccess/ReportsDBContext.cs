@@ -14,6 +14,6 @@ namespace Reports.DataAccess
 
         }
 
-        public DbSet<Reports> Reports { get; set; }
+        public DbSet<AllReports> AllReports { get; set; }
     }
 }
