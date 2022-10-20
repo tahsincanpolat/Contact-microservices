@@ -64,6 +64,10 @@ app.MapGet("/userById/{id}", async (Guid? id, UserDBContext db) =>
 app.MapGet("/userDetails", async (UserDBContext db) =>
 {
     var usersDetail = await db.Users.Include(ud => ud.ContactInfos).ToListAsync();
+    if(usersDetail == null)
+    {
+        return Results.BadRequest("Error! User Detail Not Found.");
+    }
 
     return Results.Ok(usersDetail);
 

@@ -1,5 +1,8 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Reports.Abstract;
+using Reports.Business;
+using Reports.Config;
 using Reports.Consumers;
 using Reports.DataAccess;
 using Reports.Model;
@@ -15,9 +18,15 @@ builder.Services.AddDbContext<ReportsDBContext>(
     }, ServiceLifetime.Transient
 );
 
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<IReportCreator, ReportCreator>();
+builder.Services.AddOptions();
+builder.Services.Configure<ClientConfig>(builder.Configuration.GetSection("ClientConfig"));
+
 // MassTransit Configure
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<ReportConsumer>();    
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>
