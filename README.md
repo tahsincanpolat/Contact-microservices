@@ -1,11 +1,11 @@
 # Contact Microservices
 
 ## TOOLS
-MassTransit
-ClosedXML
-EntityFrameworkCore
-Swashbuckle
-PostgreSQL
+- MassTransit
+- ClosedXML
+- EntityFrameworkCore
+- Swashbuckle
+- PostgreSQL
 
 ## Proje Açıklamaları
 
