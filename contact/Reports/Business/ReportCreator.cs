@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ClosedXML.Excel;
+using Microsoft.Extensions.Options;
 using Reports.Abstract;
 using Reports.Config;
 using Reports.Model;
@@ -30,10 +31,10 @@ namespace Reports.Business
 
                 var userDatas = userData
                     .SelectMany(info => info.ContactInfos, (info, user) => new { info, user })
-                    .Where(pair => pair.user.Type == Constants.Location.ToLower())
+                    .Where(pair => pair.user.Type.ToLower() == Constants.Location.ToLower())
                     .GroupBy(pair => pair.user.Detail, pair => pair.info);
 
-                var test = userData;
+                //var test = userData;
                 var responseModel = new List<Report>();
 
                 foreach (var u in userDatas)
@@ -43,7 +44,7 @@ namespace Reports.Business
 
                     var phoneNumbers = u
                         .SelectMany(info => info.ContactInfos, (info, user) => new { info, user })
-                         .Where(pair => pair.user.Type == Constants.Phone.ToLower())
+                         .Where(pair => pair.user.Type.ToLower() == Constants.Phone.ToLower())
                         .GroupBy(pair => pair.user.Detail, pair => pair.info);
 
                     var phoneCount = phoneNumbers.Count();
@@ -55,7 +56,8 @@ namespace Reports.Business
                         PhoneCount = phoneCount
                     });
                 }
-                Console.WriteLine("Response: {0}", responseModel);
+
+                //Console.WriteLine("Response: {0}", responseModel);
                 CreateExcelFile(responseModel);
 
                 return new Response(200, "Report created successfully", responseModel);
@@ -67,10 +69,25 @@ namespace Reports.Business
             }
         }
 
-        private void CreateExcelFile(List<Report> report)
+        public void CreateExcelFile (List<Report> reports)
         {
-            var r = report;
-            Console.WriteLine(report);
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Users Info");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "User Count";
+                worksheet.Cell(currentRow, 2).Value = "Phone Count";
+                worksheet.Cell(currentRow, 3).Value = "Location";
+                foreach (var repor in reports)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = repor.UserCount;
+                    worksheet.Cell(currentRow, 2).Value = repor.PhoneCount;
+                    worksheet.Cell(currentRow, 3).Value = repor.Location;
+                }
+
+                workbook.SaveAs($"ReportsFile/Reports-{DateTime.Now.ToString("yyyyMMddTHHmmss")}.xlsx");
+            }
         }
 
         private async Task<List<User>> FetchUserData(HttpClient httpClient)
