@@ -1,6 +1,6 @@
 # Contact Microservices
 
-## TOOLS
+## Kullanılan Teknolojiler
 - MassTransit
 - ClosedXML
 - EntityFrameworkCore
