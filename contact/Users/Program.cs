@@ -131,13 +131,15 @@ app.MapPost("/userDetailAdd/{id}", async (Guid id, ContactInfo info, UserDBConte
 
 app.MapDelete("/userDelete/{id}", async (Guid? id, UserDBContext db) =>
 {
-    var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    User user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    ContactInfo contactInfo = await db.ContactInfos.FirstOrDefaultAsync(c=>c.UId == id);
     if (user == null)
     {
         return Results.BadRequest("Error! User not found.");
     }
     else
     {
+        db.ContactInfos.Remove(contactInfo);
         db.Users.Remove(user);
         db.SaveChanges();
         return Results.Ok("User Deleted.");
