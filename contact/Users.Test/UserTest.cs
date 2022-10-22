@@ -38,7 +38,7 @@ namespace Users.Test
 
             var client = application.CreateClient();
             var users = await client.GetFromJsonAsync<List<User>>("/users");
-            
+
             Assert.Empty(users);
         }
 
@@ -65,3 +65,4 @@ namespace Users.Test
 
         }
     }
+}
