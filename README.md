@@ -14,6 +14,7 @@ Report servisinden /createReport endpointine gidildiğinde Users servisine gider
 Rapor istekleri asenkron çalışmaktadır. 
 Kullanıcı bir rapor oluşturmak istediğinde, darboğaz yaşamamak adına sistem raporu rabbitmq kuyruğuna aktarır. 
 Rapor tamamlandığında ise kullanıcı raporlarını /getReports endpointi üzerinden raporun durumunu "Completed" olarak görebilmektedir.
+Raporlar ReportsFiles klasörü altında Report-{raporun oluşturlma tarihi}.xlsx olarak raporun oluşturulma tarihiyle export edilmektedir.
 Report servisten Users servise gidebilmek için yapılan konfigürasyon appsettings.json içerisinde ClientConfig propertysi içerisinde tutulmaktadır.
 
 ## EndPointler
